@@ -58,4 +58,22 @@ describe('jqmLi directives', function() {
         var el = ng.init('<ul jqm-listview><li jqm-li-link icon="icon-custom"></li></ul>');
         expect(angular.element(el[0].querySelector('.icon-custom')).length).toBe(1);
     });
+
+    it('should use global theme settings defaults', function() {
+      var theme;
+      module(function(jqmConfigProvider) {
+        theme = jqmConfigProvider.primaryTheme();
+      });
+      var el = ng.init('<ul jqm-listview><li jqm-li-entry >An entry</li></ul>');
+      expect(angular.element(el[0].querySelector('.ui-btn-up-'+theme)).length).toBe(1);
+    });
+
+    it('should use customized global theme settings', function() {
+      var theme = 'a';
+      module(function(jqmConfigProvider) {
+        jqmConfigProvider.primaryTheme(theme);
+      });
+      var el = ng.init('<ul jqm-listview><li jqm-li-entry >An entry</li></ul>');
+      expect(angular.element(el[0].querySelector('.ui-btn-up-'+theme)).length).toBe(1);
+    });
 });
