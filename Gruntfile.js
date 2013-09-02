@@ -11,9 +11,8 @@ module.exports = function(grunt) {
               footer: grunt.file.read('build/footer.js')
           },
           src: ['src/module.js',
-                'src/**/*.js',
-                '<%= html2js.all.dest %>',
-                '<%= css2js.all.dest %>'],
+                  'src/**/*.js']
+              .concat('<%= html2js.all.dest %>').concat('<%= css2js.all.dest %>'),
           dest: 'dist/<%= pkg.name %>-nodeps.js'
         },
         all: {
@@ -134,8 +133,7 @@ module.exports = function(grunt) {
                 '<%= html2js.all.dest %>',
                 'test/**/*Spec.js',
                 {pattern: 'test/**/*', watched: true, included: false, served: true},
-                {pattern: 'components/**/*', watched: true, included: false, served: true}],
-        reporters: [process.env.TRAVIS ? 'dots' : 'progress'] //dots look better on travis log
+                {pattern: 'components/**/*', watched: true, included: false, served: true}]
       },
       dev: {
         options: {
@@ -170,7 +168,7 @@ module.exports = function(grunt) {
         scripts: [
           'docs/scripts/jquery.mobile.css.js',
           'angular.js',
-          'components/angular/angular-mobile.js',
+          '//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular-mobile.js',
           '<%= concat.all.dest %>',
           'docs/scripts/angular-scrolly-docs.js'
         ],
@@ -202,8 +200,8 @@ module.exports = function(grunt) {
     'curl-dir': {
       'components/angular': [
         'http://code.angularjs.org/1.1.5/angular.js',
-        'http://code.angularjs.org/1.1.5/angular-mobile.js',
         'http://code.angularjs.org/1.1.5/angular-mocks.js',
+        'http://code.angularjs.org/1.1.5/angular-mobile.js'
       ],
       'components/jquery-mobile': [
         'http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.js',
@@ -224,7 +222,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', ['html2js', 'css2js', 'concat']);
   grunt.registerTask('dev', ['connect','karma:dev','watch']);
-  grunt.registerTask('default', ['build','jshint','karma:localBuild','ngdocs']);
+  grunt.registerTask('default', ['install','build','jshint','karma:localBuild','ngdocs']);
   grunt.registerTask('install', 'Prepare development environment', function() {
     grunt.task.run('curl-dir');
     install();
